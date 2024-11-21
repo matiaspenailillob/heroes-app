@@ -1,7 +1,17 @@
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 
 
 export const Navbar = () => {
+
+    const navigate = useNavigate();
+
+    const onLogout = ( ) => {
+        navigate('/login', {
+            replace: true // evitamos que vuelva al historial anterior.
+        });
+    }
+
+
     return (
         <nav className="navbar navbar-expand-sm navbar-dark bg-dark p-2">
             
@@ -35,7 +45,7 @@ export const Navbar = () => {
                 <ul className="navbar-nav ml-auto">
                     <span className='nav-item nav-link text-info'> Matias </span>
 
-                    <button className='nav-item nav-link btn'> Logout </button>
+                    <button className='nav-item nav-link btn' onClick={onLogout}> Logout </button>
                 </ul>
             </div>
         </nav>
