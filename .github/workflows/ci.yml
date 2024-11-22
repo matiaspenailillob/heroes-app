@@ -1,0 +1,51 @@
+name: CI for React with Vite
+'on':
+  push:
+    branches:
+      - feat/pipeline
+  pull_request:
+    branches:
+      - feat/pipeline
+jobs:
+  build:
+    name: Build and Package
+    runs-on: ubuntu-latest
+    steps:
+    # Checkout the code from your repository
+    - name: Checkout code
+      uses: actions/checkout@v3 # Estan en el marketplace de github
+
+    # Setup Node.js
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+
+    # Cache Node.js dependencies for faster builds
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }} # Clave unica para la cache, si coincide con la existente se restayra sino, se crea una nueva. (Con hashfiles se genera un hash basado en package-lock, si este llegase a cambiar, el hash cambia dando señal a que las dependencias deben reinstalarse)
+        restore-keys: |
+          ${{ runner.os }}-node_modules-
+
+    # Install dependencies
+    - name: Install Dependencies
+      run: npm install
+
+    # Build the application  
+    - name: Build the app
+      run: npm run build
+
+    # Create a ZIP file of the build folder
+    - name: Package build as Zip
+      run: |
+        zip -r build.zip dist
+
+    # Upload ZIP as artifact
+    - name: Upload ZIP artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-zip
+        path: build-zip
