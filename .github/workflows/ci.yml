@@ -42,10 +42,11 @@ jobs:
     - name: Package build as Zip
       run: |
         zip -r build.zip dist
+      working-directory: ./
 
     # Upload ZIP as artifact
     - name: Upload ZIP artifact
       uses: actions/upload-artifact@v3
       with:
         name: build-zip
-        path: build-zip
+        path: ./build-zip
