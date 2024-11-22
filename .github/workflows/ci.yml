@@ -38,11 +38,19 @@ jobs:
     - name: Build the app
       run: npm run build
 
+    # Debug: List build directory
+    - name: Debug List build directory
+      run: ls -lah dist
+
     # Create a ZIP file of the build folder
     - name: Package build as Zip
       run: |
-        zip -r build.zip dist
+        zip -r build-zip.zip dist
       working-directory: ./
+
+    # Debug: List files in root
+    - name: Debug List files
+      run: ls -lah
 
     # Upload ZIP as artifact
     - name: Upload ZIP artifact
