@@ -1,13 +1,16 @@
 import { Navigate, useNavigate, useParams } from "react-router"
 import { getHeroById } from "../helpers/getHeroById";
+import { useMemo } from "react";
 
 export const HeroPage = () => {
+
+  // Cualquier cambio de state, o algun componente padre que indirectamente vuelva a generar este componente, y llamamos a un proceso pesado
+  // usaremos useMemo para memorizar valores a diferencia del useCallback para las funciones
 
   const { id } = useParams();
   const navigate = useNavigate()
 
-  const hero = getHeroById(id);
-  console.log('Hero: ', hero, `/assets/heroes/heroes/${id}`);
+  const hero = useMemo(() => getHeroById(id), [id]) // Se mantendrá hasta que el id cambie
 
   const onNavigateBack = () => {
     navigate(-1); // La pestaña anterior del navegador
